@@ -4,17 +4,27 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 from pydantic import BaseModel, Field
 
 from adaptiq.state.learner_profile import LearnerProfile
 from adaptiq.tools.sandbox_executor import ExecutionResult, SandboxExecutor
+
+ErrorType = Literal[
+    "conceptual_misunderstanding",
+    "syntax_error",
+    "edge_case_miss",
+    "performance_issue",
+]
+
+PassFailStatus = Literal["pass", "partial_pass", "fail", "remediation"]
 
 
 class UnitTest(BaseModel):
     test_id: str
     description: str
     code: str
+    expected_output: Optional[Any] = None
 
 
 class ChallengeSpec(BaseModel):
@@ -30,20 +40,86 @@ class ChallengeSpec(BaseModel):
     materi_section_reference: str = "§2: Core Mechanism"
 
 
+class ErrorRecord(BaseModel):
+    error_type: ErrorType
+    concept_area: str
+    description: str
+    materi_reference: str
+    actionable_feedback: str
+
+
+class SectionScores(BaseModel):
+    predict_the_output: float = 1.0
+    implementation_correctness: float = 0.0
+    edge_case_coverage: float = 0.0
+    trace_table_questions: float = 0.85
+    spatial_analogy_questions: float = 0.4
+
+
+class SubmissionEvaluation(BaseModel):
+    learner_submission: str
+    overall_score: float  # 0.0 - 1.0
+    section_scores: SectionScores
+    time_to_solution_minutes: int = 15
+    error_taxonomy: list[ErrorRecord] = Field(default_factory=list)
+    pass_fail: PassFailStatus
+    remediation_recommended: bool
+
+
+class EvaluationResult(BaseModel):
+    report_id: str
+    session_id: str
+    chapter: int
+    topic: str
+    generated_at: str
+    challenges: list[ChallengeSpec]
+    submission_evaluation: SubmissionEvaluation
+
+
+class AssessmentAgentInput(BaseModel):
+    session_id: str
+    materi_artifact_path: str = ""
+    learner_profile: LearnerProfile
+    previous_errors: list[ErrorRecord] = Field(default_factory=list)
+    difficulty_target: Literal["foundation", "standard", "advanced"] = "standard"
+    chapter: int = 1
+    topic: str = "JavaScript Runtime Internals"
+
+
 class AssessmentAgent:
     """Proctor & Grader subagent responsible for challenge specs and evaluation reports."""
 
     def __init__(self, sandbox: Optional[SandboxExecutor] = None):
         self.sandbox = sandbox or SandboxExecutor()
 
+    async def validate_challenge_reference(self, challenge: ChallengeSpec) -> None:
+        """Self-validation gate: run reference solution against challenge unit tests."""
+        if not challenge.unit_tests or not challenge.reference_solution:
+            return
+
+        for test in challenge.unit_tests:
+            res = await self.sandbox.execute_test_harness(
+                challenge.reference_solution, test.code
+            )
+            if not res.passed:
+                raise RuntimeError(
+                    f"Self-Validation Failed for challenge {challenge.id}: {res.stderr or 'Non-zero exit'}"
+                )
+
     async def generate_challenges(
         self,
-        materi_text: str,
-        profile: LearnerProfile,
+        materi_text: str = "",
+        profile: Optional[LearnerProfile] = None,
         chapter: int = 1,
         topic: str = "JavaScript Runtime Internals",
+        agent_input: Optional[AssessmentAgentInput] = None,
     ) -> list[ChallengeSpec]:
         """Generate challenges with self-validation gate on unit tests."""
+        if agent_input is not None:
+            chapter = agent_input.chapter
+            topic = agent_input.topic
+            profile = agent_input.learner_profile
+
         # 1. Predict-the-output challenge
         c1 = ChallengeSpec(
             id=f"ch{chapter}_predict_001",
@@ -59,7 +135,7 @@ console.log('4');""",
             materi_section_reference="§4: Execution Trace Table",
         )
 
-        # 2. Implementation challenge with unit test
+        # 2. Implementation challenge with unit tests
         c2 = ChallengeSpec(
             id=f"ch{chapter}_impl_001",
             type="implementation",
@@ -100,15 +176,7 @@ assert(Date.now() - start >= 25);""",
 
         # Self-Validation Gate: verify reference solution passes its own unit tests
         for ch in challenges:
-            if ch.unit_tests and ch.reference_solution:
-                for test in ch.unit_tests:
-                    res = await self.sandbox.execute_test_harness(
-                        ch.reference_solution, test.code
-                    )
-                    if not res.passed:
-                        raise RuntimeError(
-                            f"Self-Validation Failed for challenge {ch.id}: {res.stderr}"
-                        )
+            await self.validate_challenge_reference(ch)
 
         return challenges
 
@@ -121,14 +189,7 @@ assert(Date.now() - start >= 25);""",
         challenges: list[ChallengeSpec],
     ) -> dict[str, Any]:
         """Evaluate submission code against generated challenge specs."""
-        section_scores = {
-            "predict_the_output": 1.0,
-            "implementation_correctness": 0.0,
-            "edge_case_coverage": 0.0,
-            "trace_table_questions": 0.9,
-            "spatial_analogy_questions": 0.4,
-        }
-        error_taxonomy = []
+        error_taxonomy: list[ErrorRecord] = []
 
         # Run implementation tests against submission
         impl_challenges = [c for c in challenges if c.unit_tests]
@@ -136,6 +197,7 @@ assert(Date.now() - start >= 25);""",
         passed_tests = 0
 
         for c in impl_challenges:
+            test_failures_in_challenge = 0
             for test in c.unit_tests:
                 res = await self.sandbox.execute_test_harness(
                     submission_code, test.code
@@ -143,53 +205,79 @@ assert(Date.now() - start >= 25);""",
                 if res.passed:
                     passed_tests += 1
                 else:
-                    error_type = (
-                        "syntax_error" if "SyntaxError" in res.stderr else "conceptual_misunderstanding"
-                    )
+                    test_failures_in_challenge += 1
+                    if res.timed_out:
+                        error_type: ErrorType = "performance_issue"
+                        desc = f"Execution timed out on test {test.test_id}"
+                    elif "SyntaxError" in res.stderr:
+                        error_type = "syntax_error"
+                        desc = res.stderr.strip()
+                    elif "edge" in test.test_id.lower() or (passed_tests > 0 and test_failures_in_challenge == 1):
+                        error_type = "edge_case_miss"
+                        desc = res.stderr.strip() or f"Edge case failed: {test.description}"
+                    else:
+                        error_type = "conceptual_misunderstanding"
+                        desc = res.stderr.strip() or f"Failed assertion: {test.description}"
+
                     error_taxonomy.append(
-                        {
-                            "error_type": error_type,
-                            "concept_area": "asynchronous_resolution_timing",
-                            "description": res.stderr.strip() or f"Failed test {test.test_id}",
-                            "materi_reference": c.materi_section_reference,
-                            "actionable_feedback": f"Review {c.materi_section_reference}. Ensure promises are resolved asynchronously.",
-                        }
+                        ErrorRecord(
+                            error_type=error_type,
+                            concept_area="asynchronous_resolution_timing",
+                            description=desc,
+                            materi_reference=c.materi_section_reference,
+                            actionable_feedback=f"Review {c.materi_section_reference}. Ensure promises are resolved asynchronously.",
+                        )
                     )
 
         impl_score = passed_tests / total_tests
-        section_scores["implementation_correctness"] = round(impl_score, 2)
-        section_scores["edge_case_coverage"] = round(impl_score, 2)
+        edge_coverage = 1.0 if not any(err.error_type == "edge_case_miss" for err in error_taxonomy) and impl_score > 0 else impl_score
 
-        # Weighted overall score
-        overall_score = round(
-            (section_scores["predict_the_output"] * 0.3)
-            + (section_scores["implementation_correctness"] * 0.5)
-            + (section_scores["trace_table_questions"] * 0.2),
-            2,
+        section_scores = SectionScores(
+            predict_the_output=1.0,
+            implementation_correctness=round(impl_score, 2),
+            edge_case_coverage=round(edge_coverage, 2),
+            trace_table_questions=0.85,
+            spatial_analogy_questions=0.4,
         )
 
+        # If syntax error or zero passed, score is heavily reduced
+        if any(err.error_type == "syntax_error" for err in error_taxonomy):
+            overall_score = 0.2
+        elif any(err.error_type == "performance_issue" for err in error_taxonomy):
+            overall_score = 0.3
+        else:
+            overall_score = round(
+                (section_scores.predict_the_output * 0.3)
+                + (section_scores.implementation_correctness * 0.5)
+                + (section_scores.trace_table_questions * 0.2),
+                2,
+            )
+
         if overall_score >= 0.85:
-            pass_fail = "pass"
+            pass_fail: PassFailStatus = "pass"
         elif overall_score >= 0.60:
             pass_fail = "partial_pass"
         else:
             pass_fail = "fail"
 
-        report = {
-            "report_id": f"report_{session_id}_ch{chapter}_{int(datetime.now().timestamp())}",
-            "session_id": session_id,
-            "chapter": chapter,
-            "topic": topic,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "challenges": [c.model_dump() for c in challenges],
-            "submission_evaluation": {
-                "learner_submission": submission_code,
-                "overall_score": overall_score,
-                "section_scores": section_scores,
-                "time_to_solution_minutes": 15,
-                "error_taxonomy": error_taxonomy,
-                "pass_fail": pass_fail,
-                "remediation_recommended": overall_score < 0.60,
-            },
-        }
-        return report
+        sub_eval = SubmissionEvaluation(
+            learner_submission=submission_code,
+            overall_score=overall_score,
+            section_scores=section_scores,
+            time_to_solution_minutes=15,
+            error_taxonomy=error_taxonomy,
+            pass_fail=pass_fail,
+            remediation_recommended=overall_score < 0.60,
+        )
+
+        eval_result = EvaluationResult(
+            report_id=f"report_{session_id}_ch{chapter}_{int(datetime.now().timestamp())}",
+            session_id=session_id,
+            chapter=chapter,
+            topic=topic,
+            generated_at=datetime.now(timezone.utc).isoformat(),
+            challenges=challenges,
+            submission_evaluation=sub_eval,
+        )
+
+        return eval_result.model_dump()
