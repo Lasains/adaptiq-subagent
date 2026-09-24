@@ -4,12 +4,21 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 from pydantic import BaseModel, Field
 
 from adaptiq.state.learner_profile import LearnerProfile
+from adaptiq.tools.code_validator import CodeValidator
+
+FORBIDDEN_APHANTASIA_WORDS = [
+    "imagine",
+    "visualize",
+    "picture",
+    "think of",
+]
 
 
 class TutorAgentInput(BaseModel):
@@ -29,12 +38,14 @@ class TutorAgent:
         self,
         prompt_template_path: Optional[str] = None,
         api_key: Optional[str] = None,
+        code_validator: Optional[CodeValidator] = None,
     ):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         self.template_path = Path(
             prompt_template_path
             or Path(__file__).parent.parent / "prompts" / "tutor_system_prompt.txt"
         )
+        self.validator = code_validator or CodeValidator()
 
     def determine_modality(self, visual_imagery_score: float) -> str:
         if visual_imagery_score <= 3.0:
@@ -42,6 +53,18 @@ class TutorAgent:
         elif visual_imagery_score >= 8.0:
             return "hyper_visual"
         return "standard"
+
+    def filter_forbidden_words(self, text: str) -> str:
+        """Strip forbidden imagery words for Aphantasia-adapted mode."""
+        cleaned = text
+        for word in FORBIDDEN_APHANTASIA_WORDS:
+            cleaned = re.sub(re.escape(word), "[formal concept]", cleaned, flags=re.IGNORECASE)
+        return cleaned
+
+    def check_forbidden_words(self, text: str) -> list[str]:
+        """Return list of forbidden words present in text."""
+        lower = text.lower()
+        return [word for word in FORBIDDEN_APHANTASIA_WORDS if word.lower() in lower]
 
     async def generate_material(self, agent_input: TutorAgentInput) -> str:
         score = agent_input.learner_profile.cognitive_traits.visual_imagery_score
@@ -81,13 +104,21 @@ class TutorAgent:
                     },
                 )
                 if response.text and response.text.strip():
-                    return response.text.strip()
+                    content = response.text.strip()
+                    if modality == "aphantasia_adapted":
+                        content = self.filter_forbidden_words(content)
+                    return content
             except Exception as e:
                 # Log and fallback to offline generator
                 print(f"[TutorAgent] Warning: LLM generation error ({e}), falling back to deterministic template.")
 
         # High-fidelity deterministic fallback matching PRD Section 3.1
-        return self._generate_fallback_material(agent_input, modality, score)
+        content = self._generate_fallback_material(agent_input, modality, score)
+        if modality == "aphantasia_adapted":
+            # Extra guardrail against accidental forbidden words
+            content = self.filter_forbidden_words(content)
+
+        return content
 
     def _generate_fallback_material(
         self, agent_input: TutorAgentInput, modality: str, score: float
@@ -136,6 +167,7 @@ The Event Loop continuously coordinates synchronous execution with background ta
 | 4    | [main(), log('D')]   | -               | -               | [cb_macro]      | D              |
 | 5    | [cb_macro]           | -               | -               | []              | B              |"""
 
+        # Frontmatter must match strict YAML format
         return f"""---
 artifact_type: "materi"
 session_id: "{agent_input.session_id}"

@@ -66,6 +66,9 @@ def create_default_profile(learner_id: str) -> LearnerProfile:
     )
 
 
+DEFAULT_PROFILE = create_default_profile("default_learner")
+
+
 class ProfileStore:
     """Persistent storage for LearnerProfile with SQLite + JSON fallback."""
 
