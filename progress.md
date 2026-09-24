@@ -6,3 +6,7 @@ Ruling: Offline deterministic fallbacks retain full parity with PRD schemas when
 Task 1: complete (commits 39e58b0..8daaab6, review clean)
 - Spec: ✅ Modality switch (score <= 3 -> aphantasia_adapted, score >= 8 -> hyper_visual, else standard); forbidden words filter; trace table & state machine enforcement; CodeValidator via SandboxExecutor; YAML frontmatter validation.
 - Quality: Approved (30/30 tests pass).
+
+Task 2: complete (commits 8daaab6..a502337, review clean)
+- Spec: ✅ generate_challenges() emitting predict_the_output, implementation with unit tests, and diagnostic_free_response; self-validation gate with execution against sandbox; evaluate_submission() with error taxonomy (syntax_error, performance_issue, edge_case_miss, conceptual_misunderstanding) and PRD 5.1 schemas.
+- Quality: Approved (36/36 tests pass).
