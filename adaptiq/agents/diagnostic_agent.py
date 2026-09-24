@@ -7,7 +7,9 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 from pydantic import BaseModel, Field
 
+from adaptiq.heuristics.aphantasia_scorer import AphantasiaScorer
 from adaptiq.state.learner_profile import LearnerProfile
+from adaptiq.tools.misconception_tracker import MisconceptionTracker
 
 
 class DiagnosticAgentInput(BaseModel):
@@ -37,63 +39,18 @@ class DiagnosticPayload(BaseModel):
 class DiagnosticAgent:
     """Heuristic cognitive profiler detecting learner abstraction preferences and Aphantasia signals."""
 
-    def compute_heuristic_score(
+    def __init__(
         self,
-        current_score: float,
-        interaction_log: list[dict[str, Any]],
-        section_scores: dict[str, float],
-    ) -> tuple[float, float, float]:
-        """Compute (new_score, delta, confidence) using the PRD Section 3.2 Aphantasia heuristics."""
-        delta = 0.0
-        confidence_points = 0
-
-        # Guardrail: Insufficient data
-        if len(interaction_log) < 3:
-            return current_score, 0.0, 0.2
-
-        # Signal 1: Spatial metaphor confusion
-        spatial_confusion = sum(
-            1
-            for ev in interaction_log
-            if ev.get("event_type") == "confusion_signal"
-            and ev.get("metaphor_type") == "spatial"
-        )
-        delta -= spatial_confusion * 0.5
-        confidence_points += spatial_confusion
-
-        # Signal 2: Formal syntax / trace table high comprehension
-        formal_success = sum(
-            1
-            for ev in interaction_log
-            if ev.get("event_type") == "fast_pass"
-            and ev.get("metaphor_type") == "formal"
-        )
-        delta -= formal_success * 0.3
-        confidence_points += formal_success
-
-        # Signal 3: Divergence in assessment questions
-        spatial_score = section_scores.get("spatial_analogy_questions", 1.0)
-        trace_score = section_scores.get("trace_table_questions", 0.0)
-        if spatial_score < 0.5 and trace_score >= 0.8:
-            delta -= 1.5
-            confidence_points += 3
-
-        # Clamp max decrease per session to 2.0
-        delta = max(delta, -2.0)
-        confidence = min(1.0, confidence_points / 8.0)
-
-        if confidence < 0.4:
-            # Not enough strong signals to justify changing the profile score
-            return current_score, 0.0, confidence
-
-        new_score = max(0.0, min(10.0, current_score + delta))
-        return new_score, delta, confidence
+        scorer: Optional[AphantasiaScorer] = None,
+        tracker: Optional[MisconceptionTracker] = None,
+    ):
+        self.scorer = scorer or AphantasiaScorer()
+        self.tracker = tracker or MisconceptionTracker()
 
     async def update_profile(
         self, agent_input: DiagnosticAgentInput
     ) -> tuple[DiagnosticPayload, LearnerProfile]:
         eval_result = agent_input.assessment_report.get("submission_evaluation", {})
-        section_scores = eval_result.get("section_scores", {})
         overall_score = eval_result.get("overall_score", 1.0)
         chapter = agent_input.assessment_report.get("chapter", 1)
         topic = agent_input.assessment_report.get("topic", "General JavaScript")
@@ -101,29 +58,21 @@ class DiagnosticAgent:
         current_traits = agent_input.current_profile.cognitive_traits
         current_score = current_traits.visual_imagery_score
 
-        new_score, delta, confidence = self.compute_heuristic_score(
-            current_score, agent_input.interaction_log, section_scores
+        new_score, delta, confidence = self.scorer.compute_delta(
+            current_score=current_score,
+            interaction_log=agent_input.interaction_log,
+            report=agent_input.assessment_report,
         )
 
         # Misconception tracking delta
         error_taxonomy = eval_result.get("error_taxonomy", [])
-        new_misconceptions = [
-            err.get("concept_area", "")
-            for err in error_taxonomy
-            if err.get("concept_area")
-            and err.get("concept_area") not in agent_input.current_profile.current_misconceptions
-        ]
-
-        # Concept is resolved if overall score >= 0.85
-        resolved_misconceptions = []
-        if overall_score >= 0.85:
-            resolved_misconceptions = list(agent_input.current_profile.current_misconceptions)
-
-        active_misconceptions = [
-            m
-            for m in (agent_input.current_profile.current_misconceptions + new_misconceptions)
-            if m not in resolved_misconceptions
-        ]
+        new_misconceptions, resolved_misconceptions, active_misconceptions = (
+            self.tracker.compute_delta(
+                current_misconceptions=agent_input.current_profile.current_misconceptions,
+                error_taxonomy=error_taxonomy,
+                overall_score=overall_score,
+            )
+        )
 
         # Determine recommended modality
         if new_score <= 3.0:
@@ -157,7 +106,9 @@ class DiagnosticAgent:
         updated_profile.updated_at = datetime.now(timezone.utc).isoformat()
         updated_profile.diagnostic_confidence = round(confidence, 2)
         updated_profile.current_misconceptions = active_misconceptions
-        updated_profile.resolved_misconceptions.extend(resolved_misconceptions)
+        updated_profile.resolved_misconceptions.extend(
+            [r for r in resolved_misconceptions if r not in updated_profile.resolved_misconceptions]
+        )
 
         updated_profile.cognitive_traits.visual_imagery_score = round(new_score, 2)
         updated_profile.cognitive_traits.visual_imagery_score_history.append(round(new_score, 2))
