@@ -18,3 +18,7 @@ Task 3: complete (commits a502337..a71e0b0, review clean)
 Task 4: complete (commits a71e0b0..001069c, review clean)
 - Spec: ✅ LangGraph StateGraph linking diagnostic_context_inject -> tutor_agent -> challenge_generation -> submission_eval -> diagnostic_update -> remediation_router; conditional routing for pass (advance_chapter), partial_pass (challenge_generation), fail attempt 1/2 (tutor_remediation), fail attempt >= 3 (escalation with escalation_flag=True); state updates in blackboard and artifact storage.
 - Quality: Approved (43/43 tests pass).
+
+Task 5: complete (commits 001069c..f8d4760, review clean)
+- Spec: ✅ Typer CLI commands (start, submit, status, next); 3-chapter integration simulation on "JavaScript Closures" validating cognitive adaptation: Chapter 1 standard -> confusion injected -> Chapter 2 score drops to 3.0 -> Chapter 3 materi.md switches to aphantasia_adapted; forbidden words absent; trace table and state machine enforced.
+- Quality: Approved (45/45 tests pass). FINAL GATE PASSED.
