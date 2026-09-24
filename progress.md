@@ -14,3 +14,7 @@ Task 2: complete (commits 8daaab6..a502337, review clean)
 Task 3: complete (commits a502337..a71e0b0, review clean)
 - Spec: ✅ Scoring engine in AphantasiaScorer (spatial confusion -0.5, formal fast-pass -0.3, divergence -1.5, clamped to [-2.0, 2.0] and [0, 10]); guardrail for < 3 events (confidence 0.2, delta 0.0); MisconceptionTracker tracking new errors and resolving >= 0.85; multi-session convergence to score <= 3.
 - Quality: Approved (40/40 tests pass).
+
+Task 4: complete (commits a71e0b0..001069c, review clean)
+- Spec: ✅ LangGraph StateGraph linking diagnostic_context_inject -> tutor_agent -> challenge_generation -> submission_eval -> diagnostic_update -> remediation_router; conditional routing for pass (advance_chapter), partial_pass (challenge_generation), fail attempt 1/2 (tutor_remediation), fail attempt >= 3 (escalation with escalation_flag=True); state updates in blackboard and artifact storage.
+- Quality: Approved (43/43 tests pass).
