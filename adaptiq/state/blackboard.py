@@ -29,6 +29,7 @@ class BlackboardState(BaseModel):
     current_chapter: int = 1
     attempt_count: int = 1
     remediation_triggered: bool = False
+    escalation_flag: bool = False
     pending_diagnostic_payload: Optional[dict[str, Any]] = None
     last_assessment_score: Optional[float] = None
     agent_locks: AgentLocks = Field(default_factory=AgentLocks)
