@@ -120,6 +120,10 @@ class AssessmentAgent:
             topic = agent_input.topic
             profile = agent_input.learner_profile
 
+        lower_topic = topic.lower()
+        if ("javascript" not in lower_topic) and not lower_topic.endswith("js") and any(k in lower_topic for k in ["java", "mobile", "android", "layar", "tombol", "intent", "counter", "textview", "notifikasi"]):
+            return await self._generate_java_mobile_challenges(chapter, topic, profile)
+
         # 1. Predict-the-output challenge
         c1 = ChallengeSpec(
             id=f"ch{chapter}_predict_001",
@@ -281,3 +285,173 @@ assert(Date.now() - start >= 25);""",
         )
 
         return eval_result.model_dump()
+
+    async def _generate_java_mobile_challenges(
+        self, chapter: int, topic: str, profile: Optional[LearnerProfile] = None
+    ) -> list[ChallengeSpec]:
+        lower_topic = topic.lower()
+
+        if any(k in lower_topic for k in ["teks", "textview", "coldstart", "kata"]):
+            c1 = ChallengeSpec(
+                id=f"ch{chapter}_java_predict_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Apa teks persis yang akan tampil di layar HP saat baris perintah `System.out.println(pesanLayar);` dijalankan?",
+                code_snippet="""String pesanLayar = "Halo, selamat datang di aplikasi HP!";
+System.out.println(pesanLayar);""",
+                reference_answer="Halo, selamat datang di aplikasi HP!",
+                reference_explanation="Variabel pesanLayar menyimpan teks 'Halo, selamat datang di aplikasi HP!' dan dicetak langsung ke layar kaca HP.",
+                materi_section_reference="§4: Kode Contoh Java",
+            )
+            c2 = ChallengeSpec(
+                id=f"ch{chapter}_java_trace_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Jika nilai variabel diubah menjadi `pesanLayar = \"Skor Kamu: 100\";`, apa tampilan terbaru di layar HP?",
+                reference_answer="Skor Kamu: 100",
+                reference_explanation="State memori teks diperbarui sebelum instruksi cetak ke layar dijalankan.",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c3 = ChallengeSpec(
+                id=f"ch{chapter}_java_diag_001",
+                type="diagnostic_free_response",
+                difficulty="foundation",
+                prompt="Mengapa teks di Java untuk layar HP wajib dibungkus oleh tanda kutip ganda \"...\"?",
+                reference_answer="Agar komputer memahami tulisan tersebut sebagai kalimat teks murni (String), bukan sebagai nama variabel atau perintah kode Java.",
+                reference_explanation="Tanda kutip ganda adalah tanda pembeda sintaksis antara data teks literal dan instruksi logika program.",
+                materi_section_reference="§5: Pemberantasan Miskonsepsi Pemula",
+            )
+
+        elif any(k in lower_topic for k in ["button", "tombol", "counter", "angka"]):
+            c1 = ChallengeSpec(
+                id=f"ch{chapter}_java_predict_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Berapa angka skor yang tampil di layar HP setelah tombol disentuh dua kali berturut-turut?",
+                code_snippet="""int skor = 0;
+skor = skor + 1;
+skor = skor + 1;
+System.out.println("Skor: " + skor);""",
+                reference_answer="Skor: 2",
+                reference_explanation="Nilai awal 0 ditambah 1 pada sentuhan pertama (skor=1), lalu ditambah 1 lagi pada sentuhan kedua (skor=2).",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c2 = ChallengeSpec(
+                id=f"ch{chapter}_java_trace_001",
+                type="diagnostic_free_response",
+                difficulty="foundation",
+                prompt="Pada kode `skor = skor + 1;`, jelaskan arti tanda sama dengan `=` bagi seorang pemula yang baru belajar ngoding.",
+                reference_answer="Tanda = adalah perintah penugasan: hitung nilai di sebelah kanan terlebih dahulu (skor lama + 1), lalu simpan hasilnya ke dalam wadah variabel di sebelah kiri.",
+                reference_explanation="Simbol = di Java bukan persamaan matematika statis, melainkan operasi pembaruan nilai variabel.",
+                materi_section_reference="§5: Pemberantasan Miskonsepsi Pemula",
+            )
+            c3 = ChallengeSpec(
+                id=f"ch{chapter}_java_diag_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Jika pengguna menyentuh tombol sebanyak 5 kali berturut-turut dari posisi awal skor bernilai 0, berapa angka akhir variabel skor?",
+                reference_answer="5",
+                reference_explanation="Setiap kali disentuh nilai skor bertambah 1 secara kumulatif: 0 -> 1 -> 2 -> 3 -> 4 -> 5.",
+                materi_section_reference="§2: Peta Langkah-demi-Langkah",
+            )
+
+        elif any(k in lower_topic for k in ["conditional", "keputusan", "baterai", "if"]):
+            c1 = ChallengeSpec(
+                id=f"ch{chapter}_java_predict_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Jika daya baterai HP bernilai 15, kalimat mana yang akan dicetak ke layar HP?",
+                code_snippet="""int baterai = 15;
+if (baterai < 20) {
+    System.out.println("Peringatan: Baterai Lemah!");
+} else {
+    System.out.println("Status: Baterai Aman.");
+}""",
+                reference_answer="Peringatan: Baterai Lemah!",
+                reference_explanation="Kondisi 15 < 20 bernilai benar (true), sehingga komputer hanya mengeksekusi blok di dalam if.",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c2 = ChallengeSpec(
+                id=f"ch{chapter}_java_trace_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Jika variabel baterai diganti menjadi 80, kalimat apa yang tampil di layar HP?",
+                reference_answer="Status: Baterai Aman.",
+                reference_explanation="Syarat 80 < 20 bernilai salah (false), sehingga komputer melompati blok if dan menjalankan blok else.",
+                materi_section_reference="§4: Kode Contoh Java",
+            )
+            c3 = ChallengeSpec(
+                id=f"ch{chapter}_java_diag_001",
+                type="diagnostic_free_response",
+                difficulty="foundation",
+                prompt="Apakah mungkin blok `if` dan blok `else` berjalan bersamaan pada waktu yang sama? Jelaskan alasannya.",
+                reference_answer="Tidak mungkin. Komputer hanya memilih satu jalur secara eksklusif: jika syarat benar masuk ke if, jika salah masuk ke else.",
+                reference_explanation="Percabangan if-else bekerja seperti saklar dua arah yang hanya bisa mengalir ke salah satu cabang.",
+                materi_section_reference="§1: Konsep Utama",
+            )
+
+        elif any(k in lower_topic for k in ["loop", "daftar", "perulangan", "chat", "list"]):
+            c1 = ChallengeSpec(
+                id=f"ch{chapter}_java_predict_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Berapa total baris notifikasi yang berhasil dicetak ke layar HP oleh perulangan `for` berikut?",
+                code_snippet="""for (int nomorPesan = 1; nomorPesan <= 3; nomorPesan++) {
+    System.out.println("Pesan Masuk #" + nomorPesan);
+}""",
+                reference_answer="3 baris",
+                reference_explanation="Perulangan berjalan untuk nomorPesan = 1, 2, dan 3. Saat bernilai 4, kondisi <= 3 menjadi false dan loop berhenti.",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c2 = ChallengeSpec(
+                id=f"ch{chapter}_java_trace_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Apa nilai variabel `nomorPesan` pada saat perulangan memutuskan untuk berhenti?",
+                reference_answer="4",
+                reference_explanation="Pada nilai 4, syarat 'nomorPesan <= 3' dievaluasi menjadi false, menghentikan loop.",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c3 = ChallengeSpec(
+                id=f"ch{chapter}_java_diag_001",
+                type="diagnostic_free_response",
+                difficulty="foundation",
+                prompt="Mengapa sebuah perulangan `for` di aplikasi HP wajib memiliki syarat batas (seperti `nomorPesan <= 3`)?",
+                reference_answer="Sebagai rem otomatis agar perulangan berhenti saat daftar pesan selesai dan tidak membuat aplikasi HP macet (hang) akibat perulangan tanpa henti.",
+                reference_explanation="Syarat terminasi mencegah infinite loop yang dapat mengunci memori perangkat mobile.",
+                materi_section_reference="§5: Pemberantasan Miskonsepsi Pemula",
+            )
+
+        else:
+            c1 = ChallengeSpec(
+                id=f"ch{chapter}_java_predict_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Ke layar manakah aplikasi HP berpindah pada akhir eksekusi kode berikut?",
+                code_snippet="""String layarSekarang = "Halaman Beranda";
+layarSekarang = "Halaman Profil Pengguna";
+System.out.println("Layar Aktif: " + layarSekarang);""",
+                reference_answer="Layar Aktif: Halaman Profil Pengguna",
+                reference_explanation="Variabel layarSekarang ditimpa dengan nilai baru 'Halaman Profil Pengguna' sebelum dicetak ke layar.",
+                materi_section_reference="§4: Kode Contoh Java",
+            )
+            c2 = ChallengeSpec(
+                id=f"ch{chapter}_java_trace_001",
+                type="predict_the_output",
+                difficulty="foundation",
+                prompt="Sebelum tombol navigasi ditekan, di halaman mana pengguna mula-mula berada?",
+                reference_answer="Halaman Beranda",
+                reference_explanation="Nilai awal variabel layarSekarang adalah 'Halaman Beranda'.",
+                materi_section_reference="§3: Tabel Jejak Eksekusi Logika",
+            )
+            c3 = ChallengeSpec(
+                id=f"ch{chapter}_java_diag_001",
+                type="diagnostic_free_response",
+                difficulty="foundation",
+                prompt="Apa yang terjadi dengan layar lama saat pengguna berpindah ke layar baru di aplikasi mobile?",
+                reference_answer="Layar lama tidak dihancurkan melainkan disimpan di tumpukan riwayat (back stack) agar pengguna bisa kembali saat menekan tombol Back.",
+                reference_explanation="Sistem navigasi mobile mempertahankan riwayat layar sebelumnya untuk memudahkan pengguna kembali.",
+                materi_section_reference="§5: Pemberantasan Miskonsepsi Pemula",
+            )
+
+        return [c1, c2, c3]
