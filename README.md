@@ -26,11 +26,19 @@ Repositori ini mengintegrasikan dua komponen utama:
 
 ## 📍 1. Di Mana Proyek Ini Ditaruh?
 
-Proyek ini diletakkan di dalam folder lokal komputer Anda (misalnya: `D:\backup\prd` atau folder kerja coding mana saja yang Anda inginkan). 
+Proyek ini dapat diletakkan di **folder mana pun di komputer Anda** (baik di Windows, macOS, maupun Linux). Anda cukup meng-clone repositori ini dari GitHub:
+
+```bash
+# Clone repositori ke komputer Anda
+git clone https://github.com/Lasains/adaptiq-subagent.git
+
+# Masuk ke direktori proyek
+cd adaptiq-subagent
+```
 
 ### Struktur Hierarki Folder Proyek:
 ```text
-D:\backup\prd\                        <-- Root Direktori Proyek (Buka folder ini di Agent CLI/IDE)
+adaptiq-subagent/                     <-- Root Direktori Proyek (Buka folder ini di Agent CLI/IDE)
 ├── AGENTS.md                         <-- Aturan utama yang dibaca semua AI Agent CLI
 ├── OPENCODE.md                       <-- File pemandu khusus untuk OpenCode CLI
 ├── CLAUDE.md                         <-- File pemandu untuk Claude Code
@@ -49,14 +57,13 @@ D:\backup\prd\                        <-- Root Direktori Proyek (Buka folder ini
 │   └── 03_Jawaban_Kuis/              <-- Tempat siswa menjawab kuis/tantangan
 │
 ├── adaptiq/                          <-- Kode sumber Python Core Engine (LangGraph, Sandbox, dll.)
-├── session/                          <-- Riwayat sesi belajar, blackboard, dan profil kognitif
 └── tests/                            <-- Pengujian otomatis & evaluasi kualitas kurikulum
 ```
 
 > [!TIP]
-> **Paling Penting**: 
-> - **Folder AI Agent**: Buka root folder `D:\backup\prd` di terminal OpenCode / Antigravity.
-> - **Folder Siswa**: Buka sub-folder `D:\backup\prd\learning_vault` di aplikasi **Obsidian** Anda.
+> **Dua Tempat Kerja Utama**: 
+> - **Ruang Kerja AI Agent**: Buka folder root proyek (`adaptiq-subagent/`) di terminal OpenCode / Antigravity / Claude Code.
+> - **Ruang Belajar Siswa**: Buka sub-folder `learning_vault/` yang ada di dalam proyek Anda sebagai **Vault** di aplikasi **Obsidian**.
 
 ---
 
@@ -65,20 +72,19 @@ D:\backup\prd\                        <-- Root Direktori Proyek (Buka folder ini
 Anda dapat menjalankan subagent ini melalui berbagai alat AI Coding Agent favorit Anda:
 
 ### A. Setup di OpenCode CLI
-OpenCode adalah AI Coding Assistant terminal berbasis LLM. Cara men-setup subagent ini di OpenCode sangat mudah:
+OpenCode adalah AI Coding Assistant terminal berbasis LLM. Cara men-setup subagent ini di OpenCode:
 
-1. **Buka Terminal** (PowerShell atau Command Prompt) dan masuk ke direktori proyek:
-   ```powershell
-   cd D:\backup\prd
+1. **Buka Terminal** dan masuk ke direktori proyek Anda:
+   ```bash
+   cd adaptiq-subagent
    ```
 2. **Jalankan OpenCode**:
-   ```powershell
+   ```bash
    opencode
    ```
-   *(Atau jalankan OpenCode di folder proyek ini melalui command yang Anda miliki).*
 3. **Bagaimana OpenCode mengenali Subagent Tutor?**
-   - OpenCode secara otomatis membaca file instruksi di root folder: [`OPENCODE.md`](file:///d:/backup/prd/OPENCODE.md) dan [`AGENTS.md`](file:///d:/backup/prd/AGENTS.md).
-   - Di dalam file tersebut, OpenCode sudah diinstruksikan untuk memuat aturan pedagogis dari [`.agents/skills/java-tutor/SKILL.md`](file:///d:/backup/prd/.agents/skills/java-tutor/SKILL.md).
+   - OpenCode secara otomatis membaca file instruksi di root folder: [`OPENCODE.md`](OPENCODE.md) dan [`AGENTS.md`](AGENTS.md).
+   - Di dalam file tersebut, OpenCode sudah diinstruksikan untuk memuat aturan pedagogis dari [`.agents/skills/java-tutor/SKILL.md`](.agents/skills/java-tutor/SKILL.md).
 4. **Mulai Belajar**:
    Cukup ketik prompt di OpenCode:
    ```text
@@ -90,7 +96,7 @@ OpenCode adalah AI Coding Assistant terminal berbasis LLM. Cara men-setup subage
 ### B. Setup di Antigravity IDE
 Antigravity IDE secara bawaan (*native*) mendukung sistem modular Skill dan Rules:
 
-1. Buka folder `D:\backup\prd` di **Antigravity IDE** (`File` -> `Open Folder`).
+1. Buka folder proyek (`adaptiq-subagent`) di **Antigravity IDE** (`File` -> `Open Folder`).
 2. Antigravity akan otomatis mendeteksi skill di `.agents/skills/java-tutor/SKILL.md` dan aturan di `AGENTS.md`.
 3. Anda dapat langsung memanggil tutor di panel chat Antigravity:
    ```text
@@ -101,21 +107,21 @@ Antigravity IDE secara bawaan (*native*) mendukung sistem modular Skill dan Rule
 
 ### C. Setup di Claude Code / Gemini CLI
 1. Buka terminal di folder proyek:
-   ```powershell
-   cd D:\backup\prd
+   ```bash
+   cd adaptiq-subagent
    ```
 2. Jalankan Claude Code atau Gemini CLI:
-   ```powershell
+   ```bash
    claude
    ```
-3. Claude Code otomatis membaca [`CLAUDE.md`](file:///d:/backup/prd/CLAUDE.md) dan [`AGENTS.md`](file:///d:/backup/prd/AGENTS.md) saat sesi dimulai.
+3. Claude Code otomatis membaca [`CLAUDE.md`](CLAUDE.md) dan [`AGENTS.md`](AGENTS.md) saat sesi dimulai.
 4. Anda bisa langsung memberikan instruksi pengajaran atau pemeriksaan kuis.
 
 ---
 
 ### D. Setup di Cursor / Windsurf / VS Code
-1. Buka folder `D:\backup\prd` di Cursor atau VS Code.
-2. File konfigurasi `.cursorrules` / `AGENTS.md` akan menjadi pemandu konteks bagi AI Chat (seperti Cursor Composer atau Windsurf Cascade).
+1. Buka folder proyek (`adaptiq-subagent`) di Cursor atau VS Code.
+2. File konfigurasi `AGENTS.md` akan menjadi pemandu konteks bagi AI Chat (seperti Cursor Composer atau Windsurf Cascade).
 
 ---
 
@@ -124,26 +130,29 @@ Siswa membaca materi dan mengerjakan soal di aplikasi catatan populer **Obsidian
 
 1. Unduh dan buka aplikasi **Obsidian** (dari [obsidian.md](https://obsidian.md)).
 2. Pada menu awal Obsidian, pilih **"Open folder as vault"** (Buka folder sebagai vault).
-3. Pilih folder:
+3. Pilih subfolder `learning_vault` yang berada di dalam folder proyek Anda:
    ```text
-   D:\backup\prd\learning_vault
+   <lokasi-proyek>/adaptiq-subagent/learning_vault
    ```
 4. Selesai! Semua materi yang di-generate oleh AI Agent akan langsung muncul dan tersinkronisasi seketika di sidebar Obsidian Anda dengan format Markdown yang indah dan mudah dibaca.
 
 ---
 
-### F. Setup Python Engine AdaptiQ (Opsional / Standalone CLI)
-Jika Anda ingin menjalankan Core Engine Python AdaptiQ (misalnya untuk menjalankan simulasi LangGraph otomatis, evaluasi benchmark kurikulum, atau grading code sandbox):
+### F. Setup Python Engine Core (Opsional / Standalone CLI)
+Jika Anda ingin menjalankan Core Engine Python (misalnya untuk menjalankan simulasi LangGraph otomatis, evaluasi benchmark kurikulum, atau grading code sandbox):
 
-1. **Pastikan Python 3.11+ terinstal**, lalu buka terminal:
-   ```powershell
-   cd D:\backup\prd
+1. **Pastikan Python 3.11+ terinstal**, lalu buka terminal di folder proyek:
+   ```bash
+   cd adaptiq-subagent
    python -m venv .venv
-   .\.venv\Scripts\activate
+   ```
+   - Di Windows: `.\.venv\Scripts\activate`
+   - Di macOS/Linux: `source .venv/bin/activate`
+   ```bash
    pip install -r requirements.txt
    ```
-2. **Jalankan Perintah CLI AdaptiQ**:
-   ```powershell
+2. **Jalankan Perintah CLI**:
+   ```bash
    # Memulai sesi belajar baru
    python -m adaptiq.cli.main start --topic "Java Programming Fundamentals" --learner-id "siswa_01"
 
@@ -221,7 +230,7 @@ flowchart TD
 2. **Evaluasi Kecepatan & Kuis**:
    Ketika pengguna mulai menjawab kuis atau tantangan logika, kecepatan dan akurasi mereka menjadi bahan pertimbangan agen untuk mengukur apakah pengguna benar-benar pemula nol atau sudah memiliki intuisi logika komputasi.
 3. **Pemicu Adaptasi Kognitif (Pertanyaan Berulang)**:
-   Ketika materi baru diberikan dan pengguna **tetap masih bertanya atau masih kesusahan memahami setiap penjelasan** di [`learning_vault/02_Catatan_Tanya/`](file:///d:/backup/prd/learning_vault/02_Catatan_Tanya/), agen secara cerdas mengidentifikasi jenis kesulitan yang dihadapi:
+   Ketika materi baru diberikan dan pengguna **tetap masih bertanya atau masih kesusahan memahami setiap penjelasan** di [`learning_vault/02_Catatan_Tanya/`](learning_vault/02_Catatan_Tanya/), agen secara cerdas mengidentifikasi jenis kesulitan yang dihadapi:
    - Jika pengguna kewalahan membaca teks padat atau tanda kurung ➔ Agen mengaktifkan adaptasi **Disleksia** (format poin pendek, kata kunci tebal, jeda baris lega).
    - Jika pengguna bingung membayangkan alur data atau analogi abstrak ➔ Agen mengaktifkan adaptasi **Afantasia** (menghilangkan kata *"bayangkan"*, menyajikan **Execution Trace Table** literal step-by-step).
 
@@ -296,7 +305,7 @@ Agar siswa memiliki pondasi yang kokoh tanpa kebingungan, alur pengajaran dibagi
 Agent Tutor ini dilengkapi kemampuan untuk merancang **Silabus & Roadmap Belajar Terstruktur** sebelum bab pertama dimulai, sehingga siswa memiliki gambaran menyeluruh tentang perjalanan belajarnya.
 
 Peta jalan lengkap telah disediakan di:
-👉 [`learning_vault/SILABUS_DAN_ROADMAP.md`](file:///d:/backup/prd/learning_vault/SILABUS_DAN_ROADMAP.md)
+👉 [`learning_vault/SILABUS_DAN_ROADMAP.md`](learning_vault/SILABUS_DAN_ROADMAP.md)
 
 ### Cara Meminta Agen Membuat atau Memodifikasi Roadmap:
 Ketik perintah ini di jendela chat OpenCode / Antigravity / Claude Code:
