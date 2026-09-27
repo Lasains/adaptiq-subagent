@@ -53,7 +53,7 @@ Evaluasi menggunakan dua kelompok metrik objektif (otomatis) dan kualitatif (ped
 
 ## 3. Dataset Benchmark Pengujian (5 Kasus Uji Mobile Java)
 
-Benchmark dataset tersimpan di [`tests/eval/datasets/java_mobile_zero_knowledge_dataset.json`](file:///d:/backup/prd/tests/eval/datasets/java_mobile_zero_knowledge_dataset.json):
+Benchmark dataset tersimpan di [`tests/eval/datasets/java_mobile_zero_knowledge_dataset.json`](tests/eval/datasets/java_mobile_zero_knowledge_dataset.json):
 
 ```json
 {
@@ -146,13 +146,13 @@ Benchmark dataset tersimpan di [`tests/eval/datasets/java_mobile_zero_knowledge_
 
 ## 6. Bukti Eksekusi Uji (Test Execution Log)
 
-Pengujian integrasi otomatis dijalankan melalui modul pytest [`tests/test_java_mobile_eval.py`](file:///d:/backup/prd/tests/test_java_mobile_eval.py):
+Pengujian integrasi otomatis dijalankan melalui modul pytest [`tests/test_java_mobile_eval.py`](tests/test_java_mobile_eval.py):
 
 ```powershell
 $ pytest tests/test_java_mobile_eval.py -v
 ============================= test session starts =============================
 platform win32 -- Python 3.13.3, pytest-9.1.1, pluggy-1.6.0
-rootdir: D:\backup\prd
+rootdir: .
 configfile: pytest.ini
 collected 1 item
 
@@ -162,9 +162,9 @@ tests/test_java_mobile_eval.py::test_java_mobile_eval_benchmark_suite PASSED [10
 ```
 
 Seluruh artefak hasil kalkulasi metrik detail per kasus uji tersimpan di:
-- JSON Hasil Evaluasi: [`artifacts/grade_results/latest_results_java_mobile.json`](file:///d:/backup/prd/artifacts/grade_results/latest_results_java_mobile.json)
-- Dataset Uji: [`tests/eval/datasets/java_mobile_zero_knowledge_dataset.json`](file:///d:/backup/prd/tests/eval/datasets/java_mobile_zero_knowledge_dataset.json)
-- Konfigurasi Evaluasi: [`tests/eval/eval_config.yaml`](file:///d:/backup/prd/tests/eval/eval_config.yaml)
+- JSON Hasil Evaluasi: [`artifacts/grade_results/latest_results_java_mobile.json`](artifacts/grade_results/latest_results_java_mobile.json)
+- Dataset Uji: [`tests/eval/datasets/java_mobile_zero_knowledge_dataset.json`](tests/eval/datasets/java_mobile_zero_knowledge_dataset.json)
+- Konfigurasi Evaluasi: [`tests/eval/eval_config.yaml`](tests/eval/eval_config.yaml)
 
 ---
 
