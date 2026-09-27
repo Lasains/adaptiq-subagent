@@ -1,10 +1,10 @@
-# 📱 AdaptiKog (AdaptiQ): Inclusive Cognitive AI Tutor & Learning Vault
+# 📱 Inclusive Cognitive AI Code Tutor & Learning Vault
 
-Selamat datang di **AdaptiKog (AdaptiQ)** — platform tutor pemrograman bertenaga AI yang dirancang khusus dengan pendekatan **inklusif kognitif** (*neurodiversity-first*): ramah untuk **pemula tanpa dasar coding (*zero-knowledge*)**, pembelajar dengan **disleksia**, dan pembelajar dengan **afantasia (*aphantasia*)**.
+Selamat datang di platform tutor pemrograman bertenaga AI yang dirancang dengan pendekatan **inklusif kognitif**: ramah untuk **pemula tanpa dasar coding (*zero-knowledge*)**, serta adaptif bagi pembelajar dengan **disleksia** dan **afantasia (*aphantasia*)**.
 
 Repositori ini mengintegrasikan dua komponen utama:
 1. **AI Agent Skill & Rules** (untuk **OpenCode**, **Antigravity IDE**, **Claude Code**, **Gemini CLI**, **Cursor**, dll.) yang berinteraksi langsung dengan siswa melalui catatan di **Obsidian**.
-2. **AdaptiQ Engine** (Core Python backend berbasis State Machine & Sandbox Test Harness).
+2. **Core Python Engine & Test Harness** (berbasis State Machine & Sandbox Execution).
 
 ---
 
@@ -185,38 +185,45 @@ flowchart TD
         PROMPT_IN --> RULE_READER --> ACTION_DISPATCHER
     end
 
-    subgraph COGNITIVE_ENGINE["🧠 Mesin Adaptasi Kognitif (Java AdaptiKog)"]
+    subgraph COGNITIVE_ENGINE["🧠 Mesin Adaptasi Kognitif Dinamis"]
         direction TB
-        DYSLEXIA["🔤 Filter Disleksia:\n- Paragraf ≤ 3 kalimat\n- Poin bernomor & Bold\n- Jeda baris visual yang lega"]
-        APHANTASIA["📊 Filter Afantasia:\n- 0 metafora visual (HAPUS 'bayangkan')\n- Wajib Execution Trace Table\n- State memori literal (Stack & Heap)"]
-        ZERO_KNOW["🌱 Filter Pemula Murni (Zero-Knowledge):\n- Analogi mekanis nyata (saklar, mesin antrean)\n- Scaffolding bertahap: Java Murni -> Mobile\n- Anti-Jargon tanpa pengantar"]
+        BASELINE["🌱 Baseline Default:\n- Pemula Murni (Zero-Knowledge)\n- TIDAK ada asumsi masalah kognitif awal\n- Bahasa bersih, ramah, dan bebas jargon"]
+        
+        DIAGNOSTIC{"🔍 Evaluasi Observasi Dinamis:\n1. Hasil & kecepatan kuis\n2. Pertanyaan berulang di Catatan Tanya"}
+        
+        DYSLEXIA["🔤 Penyesuaian Disleksia (Jika Kesulitan Membaca):\n- Paragraf ringkas ≤ 3 kalimat\n- Poin bernomor & Bold\n- Jeda baris visual yang lega"]
+        APHANTASIA["📊 Penyesuaian Afantasia (Jika Kesulitan Visualisasi):\n- Hapus kata 'bayangkan'\n- Wajib Execution Trace Table\n- State memori Stack & Heap literal"]
+        
+        BASELINE --> DIAGNOSTIC
+        DIAGNOSTIC -->|Kesulitan Teks/Sintaksis| DYSLEXIA
+        DIAGNOSTIC -->|Kesulitan Alur/Mental Imagery| APHANTASIA
     end
 
     %% Hubungan Alur Kerja
     ACTION_DISPATCHER -->|1. Minta Materi Baru / Roadmap| COGNITIVE_ENGINE
-    COGNITIVE_ENGINE -->|Tulis Modul| MATERI
+    COGNITIVE_ENGINE -->|Tulis Modul Ramah Pemula| MATERI
     COGNITIVE_ENGINE -->|Update Peta Belajar| ROADMAP
 
     MATERI -.->|Siswa Membaca Materi| TANYA
-    TANYA -->|2. Siswa Minta Penjelasan Ulang| ACTION_DISPATCHER
-    ACTION_DISPATCHER -->|Jelaskan dengan Analogi Baru| PROMPT_IN
+    TANYA -->|2. Siswa Masih Bingung / Terus Bertanya| ACTION_DISPATCHER
+    ACTION_DISPATCHER -->|Deteksi Kesulitan Kognitif Dinamis & Jelaskan Ulang| COGNITIVE_ENGINE
+    COGNITIVE_ENGINE -->|Respon Adaptif Baru| PROMPT_IN
 
     MATERI -.->|Siswa Mengerjakan Soal| KUIS
-    KUIS -->|3. Siswa Minta Koreksi Kuis| ACTION_DISPATCHER
-    ACTION_DISPATCHER -->|Evaluasi & Basmi Miskonsepsi| COGNITIVE_ENGINE
+    KUIS -->|3. Siswa Mengirimkan Jawaban Kuis| ACTION_DISPATCHER
+    ACTION_DISPATCHER -->|Evaluasi Pemahaman & Inokulasi Miskonsepsi| COGNITIVE_ENGINE
     COGNITIVE_ENGINE -->|Bila Lulus -> Buka Bab Berikutnya| MATERI
 ```
 
-### 🔁 Siklus Belajar 3 Langkah (The 3-Step Feedback Loop):
-1. **Langkah 1: Generasi Materi Inklusif**  
-   Agen menyusun materi di [`learning_vault/01_Materi/`](file:///d:/backup/prd/learning_vault/01_Materi/). Materi otomatis lolos 3 filter:
-   - *Ramah Disleksia*: Tidak ada tumpukan teks panjang, menggunakan bullet points tegas.
-   - *Ramah Afantasia*: Menggunakan **Tabel Jejak Eksekusi (Trace Table)**, tanpa kata-kata imajiner seperti *"bayangkan kotak di pikiranmu"*.
-   - *Ramah Pemula*: Konsep teknis didekonstruksi dengan analogi mekanik nyata.
-2. **Langkah 2: Diskusi & Klarifikasi Tanpa Rasa Takut**  
-   Jika ada bagian yang sulit dipahami, siswa cukup menulis di [`learning_vault/02_Catatan_Tanya/`](file:///d:/backup/prd/learning_vault/02_Catatan_Tanya/). Tutor akan membaca catatan tersebut dan menjelaskan ulang dengan bahasa yang lebih sederhana dan sudut pandang baru.
-3. **Langkah 3: Evaluasi Kuis & Deteksi Miskonsepsi**  
-   Siswa menjawab kuis di [`learning_vault/03_Jawaban_Kuis/`](file:///d:/backup/prd/learning_vault/03_Jawaban_Kuis/). Tutor mengoreksi logika siswa, merayakan keberhasilan, dan menginokulasi (*memberantas*) salah paham konsep sebelum melangkah ke bab berikutnya.
+### 🧠 Prinsip Diagnosa & Adaptasi Kognitif Dinamis:
+1. **Baseline Awal (Tanpa Masalah Kognitif)**:
+   Secara *default*, semua pengguna diposisikan sebagai **Pemula Murni (*Zero-Knowledge Beginner*)**, yaitu seseorang yang baru pertama kali menyentuh dunia coding. Di awal, sistem **TIDAK** berasumsi bahwa pengguna memiliki masalah kognitif (disleksia atau afantasia).
+2. **Evaluasi Kecepatan & Kuis**:
+   Ketika pengguna mulai menjawab kuis atau tantangan logika, kecepatan dan akurasi mereka menjadi bahan pertimbangan agen untuk mengukur apakah pengguna benar-benar pemula nol atau sudah memiliki intuisi logika komputasi.
+3. **Pemicu Adaptasi Kognitif (Pertanyaan Berulang)**:
+   Ketika materi baru diberikan dan pengguna **tetap masih bertanya atau masih kesusahan memahami setiap penjelasan** di [`learning_vault/02_Catatan_Tanya/`](file:///d:/backup/prd/learning_vault/02_Catatan_Tanya/), agen secara cerdas mengidentifikasi jenis kesulitan yang dihadapi:
+   - Jika pengguna kewalahan membaca teks padat atau tanda kurung ➔ Agen mengaktifkan adaptasi **Disleksia** (format poin pendek, kata kunci tebal, jeda baris lega).
+   - Jika pengguna bingung membayangkan alur data atau analogi abstrak ➔ Agen mengaktifkan adaptasi **Afantasia** (menghilangkan kata *"bayangkan"*, menyajikan **Execution Trace Table** literal step-by-step).
 
 ---
 
