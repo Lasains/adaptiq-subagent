@@ -1,0 +1,346 @@
+{
+  "eval_suite": "java_mobile_zero_knowledge_benchmark",
+  "evaluated_at": "2026-09-25T09:26:57.314458+00:00",
+  "total_cases": 5,
+  "all_passed": true,
+  "total_score_percentage": 99.4,
+  "average_material_score": 98.8,
+  "average_challenge_score": 100.0,
+  "cases": [
+    {
+      "case_id": "JAVA-MOB-01-TEXTVIEW",
+      "topic": "Java Mobile - Layar HP & Menampilkan Teks Pertama (TextView & String)",
+      "chapter": 1,
+      "overall_case_score": 100.0,
+      "passed": true,
+      "material_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_clarity_score": 5.0,
+          "aphantasia_safety_score": 1.0,
+          "dyslexia_formatting_score": 1.0,
+          "code_executability_score": 1.0,
+          "mobile_relevance_score": 5.0
+        },
+        "diagnostics": {
+          "forbidden_words_found": [],
+          "has_trace_table": true,
+          "code_executable": true,
+          "code_errors": [],
+          "has_real_world_analogy": true,
+          "has_misconception_inoculation": true
+        }
+      },
+      "challenge_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_fairness": 5.0,
+          "scaffolding_diversity": 5.0,
+          "logic_verification": 5.0,
+          "feedback_actionability": 5.0
+        },
+        "diagnostics": {
+          "challenge_count": 3,
+          "types_included": [
+            "diagnostic_free_response",
+            "predict_the_output"
+          ],
+          "has_reference_answers": true,
+          "has_explanations": true
+        }
+      },
+      "artifacts": {
+        "materi_snippet": "---\nartifact_type: \"materi\"\nsession_id: \"eval_sess_20260925_092653_JAVA-MOB-01-TEXTVIEW\"\ntopic: \"Java Mobile - Layar HP & Menampilkan Teks Pertama (TextView & String)\"\nchapter: 1\nestimated_reading_time_minutes: 8\nprerequisites: []\ncognitive_profile_applied: \"aphantasia_adapted\"\nvisual_imagery_score_at_generation: 1.0\nremediation_mode: false\nchapter_overflow: false\ngenerated_at: \"2026-09-25T09:26:5...",
+        "challenge_count": 3,
+        "challenges_summary": [
+          {
+            "id": "ch1_java_predict_001",
+            "type": "predict_the_output",
+            "prompt": "Apa teks persis yang akan tampil di layar HP saat baris perintah `System.out.println(pesanLayar);` dijalankan?",
+            "answer": "Halo, selamat datang di aplikasi HP!"
+          },
+          {
+            "id": "ch1_java_trace_001",
+            "type": "predict_the_output",
+            "prompt": "Jika nilai variabel diubah menjadi `pesanLayar = \"Skor Kamu: 100\";`, apa tampilan terbaru di layar HP?",
+            "answer": "Skor Kamu: 100"
+          },
+          {
+            "id": "ch1_java_diag_001",
+            "type": "diagnostic_free_response",
+            "prompt": "Mengapa teks di Java untuk layar HP wajib dibungkus oleh tanda kutip ganda \"...\"?",
+            "answer": "Agar komputer memahami tulisan tersebut sebagai kalimat teks murni (String), bukan sebagai nama variabel atau perintah kode Java."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-02-BUTTON-COUNTER",
+      "topic": "Java Mobile - Tombol Interaktif & Variabel Angka (Button & int Count)",
+      "chapter": 2,
+      "overall_case_score": 100.0,
+      "passed": true,
+      "material_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_clarity_score": 5.0,
+          "aphantasia_safety_score": 1.0,
+          "dyslexia_formatting_score": 1.0,
+          "code_executability_score": 1.0,
+          "mobile_relevance_score": 5.0
+        },
+        "diagnostics": {
+          "forbidden_words_found": [],
+          "has_trace_table": true,
+          "code_executable": true,
+          "code_errors": [],
+          "has_real_world_analogy": true,
+          "has_misconception_inoculation": true
+        }
+      },
+      "challenge_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_fairness": 5.0,
+          "scaffolding_diversity": 5.0,
+          "logic_verification": 5.0,
+          "feedback_actionability": 5.0
+        },
+        "diagnostics": {
+          "challenge_count": 3,
+          "types_included": [
+            "diagnostic_free_response",
+            "predict_the_output"
+          ],
+          "has_reference_answers": true,
+          "has_explanations": true
+        }
+      },
+      "artifacts": {
+        "materi_snippet": "---\nartifact_type: \"materi\"\nsession_id: \"eval_sess_20260925_092653_JAVA-MOB-02-BUTTON-COUNTER\"\ntopic: \"Java Mobile - Tombol Interaktif & Variabel Angka (Button & int Count)\"\nchapter: 2\nestimated_reading_time_minutes: 8\nprerequisites: [\"TextView & String\"]\ncognitive_profile_applied: \"aphantasia_adapted\"\nvisual_imagery_score_at_generation: 1.0\nremediation_mode: false\nchapter_overflow: false\ngenerate...",
+        "challenge_count": 3,
+        "challenges_summary": [
+          {
+            "id": "ch2_java_predict_001",
+            "type": "predict_the_output",
+            "prompt": "Berapa angka skor yang tampil di layar HP setelah tombol disentuh dua kali berturut-turut?",
+            "answer": "Skor: 2"
+          },
+          {
+            "id": "ch2_java_trace_001",
+            "type": "diagnostic_free_response",
+            "prompt": "Pada kode `skor = skor + 1;`, jelaskan arti tanda sama dengan `=` bagi seorang pemula yang baru belajar ngoding.",
+            "answer": "Tanda = adalah perintah penugasan: hitung nilai di sebelah kanan terlebih dahulu (skor lama + 1), lalu simpan hasilnya ke dalam wadah variabel di sebelah kiri."
+          },
+          {
+            "id": "ch2_java_diag_001",
+            "type": "predict_the_output",
+            "prompt": "Jika pengguna menyentuh tombol sebanyak 5 kali berturut-turut dari posisi awal skor bernilai 0, berapa angka akhir variabel skor?",
+            "answer": "5"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-03-CONDITIONAL-SCREEN",
+      "topic": "Java Mobile - Logika Keputusan di Layar (if-else & State HP)",
+      "chapter": 3,
+      "overall_case_score": 98.5,
+      "passed": true,
+      "material_evaluation": {
+        "composite_score": 97.0,
+        "metrics": {
+          "zero_knowledge_clarity_score": 5.0,
+          "aphantasia_safety_score": 1.0,
+          "dyslexia_formatting_score": 1.0,
+          "code_executability_score": 1.0,
+          "mobile_relevance_score": 4.0
+        },
+        "diagnostics": {
+          "forbidden_words_found": [],
+          "has_trace_table": true,
+          "code_executable": true,
+          "code_errors": [],
+          "has_real_world_analogy": true,
+          "has_misconception_inoculation": true
+        }
+      },
+      "challenge_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_fairness": 5.0,
+          "scaffolding_diversity": 5.0,
+          "logic_verification": 5.0,
+          "feedback_actionability": 5.0
+        },
+        "diagnostics": {
+          "challenge_count": 3,
+          "types_included": [
+            "diagnostic_free_response",
+            "predict_the_output"
+          ],
+          "has_reference_answers": true,
+          "has_explanations": true
+        }
+      },
+      "artifacts": {
+        "materi_snippet": "---\nartifact_type: \"materi\"\nsession_id: \"eval_sess_20260925_092653_JAVA-MOB-03-CONDITIONAL-SCREEN\"\ntopic: \"Java Mobile - Logika Keputusan di Layar (if-else & State HP)\"\nchapter: 3\nestimated_reading_time_minutes: 8\nprerequisites: [\"Button & int Count\"]\ncognitive_profile_applied: \"aphantasia_adapted\"\nvisual_imagery_score_at_generation: 1.0\nremediation_mode: false\nchapter_overflow: false\ngenerated_at...",
+        "challenge_count": 3,
+        "challenges_summary": [
+          {
+            "id": "ch3_java_predict_001",
+            "type": "predict_the_output",
+            "prompt": "Jika daya baterai HP bernilai 15, kalimat mana yang akan dicetak ke layar HP?",
+            "answer": "Peringatan: Baterai Lemah!"
+          },
+          {
+            "id": "ch3_java_trace_001",
+            "type": "predict_the_output",
+            "prompt": "Jika variabel baterai diganti menjadi 80, kalimat apa yang tampil di layar HP?",
+            "answer": "Status: Baterai Aman."
+          },
+          {
+            "id": "ch3_java_diag_001",
+            "type": "diagnostic_free_response",
+            "prompt": "Apakah mungkin blok `if` dan blok `else` berjalan bersamaan pada waktu yang sama? Jelaskan alasannya.",
+            "answer": "Tidak mungkin. Komputer hanya memilih satu jalur secara eksklusif: jika syarat benar masuk ke if, jika salah masuk ke else."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-04-LIST-REPETITION",
+      "topic": "Java Mobile - Menampilkan Daftar Berulang di Layar HP (for loop & List Data)",
+      "chapter": 4,
+      "overall_case_score": 98.5,
+      "passed": true,
+      "material_evaluation": {
+        "composite_score": 97.0,
+        "metrics": {
+          "zero_knowledge_clarity_score": 5.0,
+          "aphantasia_safety_score": 1.0,
+          "dyslexia_formatting_score": 1.0,
+          "code_executability_score": 1.0,
+          "mobile_relevance_score": 4.0
+        },
+        "diagnostics": {
+          "forbidden_words_found": [],
+          "has_trace_table": true,
+          "code_executable": true,
+          "code_errors": [],
+          "has_real_world_analogy": true,
+          "has_misconception_inoculation": true
+        }
+      },
+      "challenge_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_fairness": 5.0,
+          "scaffolding_diversity": 5.0,
+          "logic_verification": 5.0,
+          "feedback_actionability": 5.0
+        },
+        "diagnostics": {
+          "challenge_count": 3,
+          "types_included": [
+            "diagnostic_free_response",
+            "predict_the_output"
+          ],
+          "has_reference_answers": true,
+          "has_explanations": true
+        }
+      },
+      "artifacts": {
+        "materi_snippet": "---\nartifact_type: \"materi\"\nsession_id: \"eval_sess_20260925_092653_JAVA-MOB-04-LIST-REPETITION\"\ntopic: \"Java Mobile - Menampilkan Daftar Berulang di Layar HP (for loop & List Data)\"\nchapter: 4\nestimated_reading_time_minutes: 8\nprerequisites: [\"if-else & State HP\"]\ncognitive_profile_applied: \"aphantasia_adapted\"\nvisual_imagery_score_at_generation: 1.0\nremediation_mode: false\nchapter_overflow: false...",
+        "challenge_count": 3,
+        "challenges_summary": [
+          {
+            "id": "ch4_java_predict_001",
+            "type": "predict_the_output",
+            "prompt": "Berapa total baris notifikasi yang berhasil dicetak ke layar HP oleh perulangan `for` berikut?",
+            "answer": "3 baris"
+          },
+          {
+            "id": "ch4_java_trace_001",
+            "type": "predict_the_output",
+            "prompt": "Apa nilai variabel `nomorPesan` pada saat perulangan memutuskan untuk berhenti?",
+            "answer": "4"
+          },
+          {
+            "id": "ch4_java_diag_001",
+            "type": "diagnostic_free_response",
+            "prompt": "Mengapa sebuah perulangan `for` di aplikasi HP wajib memiliki syarat batas (seperti `nomorPesan <= 3`)?",
+            "answer": "Sebagai rem otomatis agar perulangan berhenti saat daftar pesan selesai dan tidak membuat aplikasi HP macet (hang) akibat perulangan tanpa henti."
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-05-NAVIGATION-INTENT",
+      "topic": "Java Mobile - Pindah Layar Aplikasi (Intent & Screen Transition)",
+      "chapter": 5,
+      "overall_case_score": 100.0,
+      "passed": true,
+      "material_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_clarity_score": 5.0,
+          "aphantasia_safety_score": 1.0,
+          "dyslexia_formatting_score": 1.0,
+          "code_executability_score": 1.0,
+          "mobile_relevance_score": 5.0
+        },
+        "diagnostics": {
+          "forbidden_words_found": [],
+          "has_trace_table": true,
+          "code_executable": true,
+          "code_errors": [],
+          "has_real_world_analogy": true,
+          "has_misconception_inoculation": true
+        }
+      },
+      "challenge_evaluation": {
+        "composite_score": 100.0,
+        "metrics": {
+          "zero_knowledge_fairness": 5.0,
+          "scaffolding_diversity": 5.0,
+          "logic_verification": 5.0,
+          "feedback_actionability": 5.0
+        },
+        "diagnostics": {
+          "challenge_count": 3,
+          "types_included": [
+            "diagnostic_free_response",
+            "predict_the_output"
+          ],
+          "has_reference_answers": true,
+          "has_explanations": true
+        }
+      },
+      "artifacts": {
+        "materi_snippet": "---\nartifact_type: \"materi\"\nsession_id: \"eval_sess_20260925_092653_JAVA-MOB-05-NAVIGATION-INTENT\"\ntopic: \"Java Mobile - Pindah Layar Aplikasi (Intent & Screen Transition)\"\nchapter: 5\nestimated_reading_time_minutes: 8\nprerequisites: [\"for loop & List Data\"]\ncognitive_profile_applied: \"aphantasia_adapted\"\nvisual_imagery_score_at_generation: 1.0\nremediation_mode: false\nchapter_overflow: false\ngenerat...",
+        "challenge_count": 3,
+        "challenges_summary": [
+          {
+            "id": "ch5_java_predict_001",
+            "type": "predict_the_output",
+            "prompt": "Ke layar manakah aplikasi HP berpindah pada akhir eksekusi kode berikut?",
+            "answer": "Layar Aktif: Halaman Profil Pengguna"
+          },
+          {
+            "id": "ch5_java_trace_001",
+            "type": "predict_the_output",
+            "prompt": "Sebelum tombol navigasi ditekan, di halaman mana pengguna mula-mula berada?",
+            "answer": "Halaman Beranda"
+          },
+          {
+            "id": "ch5_java_diag_001",
+            "type": "diagnostic_free_response",
+            "prompt": "Apa yang terjadi dengan layar lama saat pengguna berpindah ke layar baru di aplikasi mobile?",
+            "answer": "Layar lama tidak dihancurkan melainkan disimpan di tumpukan riwayat (back stack) agar pengguna bisa kembali saat menekan tombol Back."
+          }
+        ]
+      }
+    }
+  ]
+}

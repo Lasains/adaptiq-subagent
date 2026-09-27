@@ -1,0 +1,99 @@
+{
+  "dataset_name": "java-mobile-zero-knowledge-benchmark",
+  "version": "1.0.0",
+  "target_persona": {
+    "name": "Budi Zero-Knowledge",
+    "background": "Pure zero-knowledge beginner (tidak tahu sama sekali apa itu ngoding, class, variable, compiler)",
+    "cognitive_traits": {
+      "dyslexia_mode": true,
+      "aphantasia_mode": true,
+      "visual_imagery_score": 1.0,
+      "skill_level": "zero_knowledge",
+      "pacing_preference": "step_by_step"
+    },
+    "constraints": [
+      "Dilarang menggunakan jargon teknis tanpa analogi mekanis dunia nyata",
+      "Dilarang menggunakan metafora imajiner visual (bayangkan, visualisasikan)",
+      "Wajib menggunakan chunking pendek maksimal 3 kalimat per paragraf",
+      "Wajib menyertakan Execution Trace Table berbasis Markdown",
+      "Kode Java wajib executable di JDK 21+ dengan komentar penjelas per baris"
+    ]
+  },
+  "eval_cases": [
+    {
+      "case_id": "JAVA-MOB-01-TEXTVIEW",
+      "topic": "Java Mobile - Layar HP & Menampilkan Teks Pertama (TextView & String)",
+      "chapter": 1,
+      "user_prompt": "Halo tutor, saya belum pernah ngoding sama sekali dan nggak tahu coding itu apa. Saya mau belajar bikin aplikasi HP Android dengan Java. Bagaimana cara pertama menampilkan tulisan di layar HP?",
+      "expected_pedagogical_focus": "Analogi papan nama digital toko, wadah teks String, dekonstruksi class dan main, tabel trace memori HP vs layar, dan kuis tebak teks layar.",
+      "prerequisites": [],
+      "rubric_targets": {
+        "pedagogical_clarity_min": 4.5,
+        "aphantasia_compliance": 1.0,
+        "dyslexia_compliance": 1.0,
+        "code_executability": 1.0,
+        "question_quality_min": 4.5
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-02-BUTTON-COUNTER",
+      "topic": "Java Mobile - Tombol Interaktif & Variabel Angka (Button & int Count)",
+      "chapter": 2,
+      "user_prompt": "Saya mau tombol di layar HP kalau disentuh bisa nambah skor dari 0 jadi 1, lalu 2. Gimana caranya komputer HP mengingat angka skor?",
+      "expected_pedagogical_focus": "Analogi saklar bel dan counter antrean bank, variabel int, arti simbol penugasan '=' bukan matematika statis, trace perubahan skor tiap klik, dan kuis trace angka.",
+      "prerequisites": ["TextView & String"],
+      "rubric_targets": {
+        "pedagogical_clarity_min": 4.5,
+        "aphantasia_compliance": 1.0,
+        "dyslexia_compliance": 1.0,
+        "code_executability": 1.0,
+        "question_quality_min": 4.5
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-03-CONDITIONAL-SCREEN",
+      "topic": "Java Mobile - Logika Keputusan di Layar (if-else & State HP)",
+      "chapter": 3,
+      "user_prompt": "Gimana caranya supaya HP bisa tahu kapan harus kasih peringatan warna merah kalau baterai sisa sedikit, dan warna hijau kalau aman?",
+      "expected_pedagogical_focus": "Analogi sensor saklar otomatis dua arah, evaluasi true/false tanpa jargon rumit, pemilihan jalur eksklusif if vs else, tabel keputusan kondisi, dan kuis penentuan jalur layar.",
+      "prerequisites": ["Button & int Count"],
+      "rubric_targets": {
+        "pedagogical_clarity_min": 4.5,
+        "aphantasia_compliance": 1.0,
+        "dyslexia_compliance": 1.0,
+        "code_executability": 1.0,
+        "question_quality_min": 4.5
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-04-LIST-REPETITION",
+      "topic": "Java Mobile - Menampilkan Daftar Berulang di Layar HP (for loop & List Data)",
+      "chapter": 4,
+      "user_prompt": "Aplikasi chat di HP kan ada banyak baris pesan masuk. Apakah saya harus ngetik perintah cetak satu-satu ratusan kali, atau ada mesin otomatisnya?",
+      "expected_pedagogical_focus": "Analogi mesin pencetak tiket nomor antrean otomatis, rem terminasi pencegah aplikasi hang/macet, trace iterasi 1 sampai berhenti, dan kuis iterasi terminasi.",
+      "prerequisites": ["if-else & State HP"],
+      "rubric_targets": {
+        "pedagogical_clarity_min": 4.5,
+        "aphantasia_compliance": 1.0,
+        "dyslexia_compliance": 1.0,
+        "code_executability": 1.0,
+        "question_quality_min": 4.5
+      }
+    },
+    {
+      "case_id": "JAVA-MOB-05-NAVIGATION-INTENT",
+      "topic": "Java Mobile - Pindah Layar Aplikasi (Intent & Screen Transition)",
+      "chapter": 5,
+      "user_prompt": "Kalau tombol 'Lihat Profil' ditekan, saya mau layarnya pindah dari Beranda ke Halaman Profil. Gimana konsepnya di HP?",
+      "expected_pedagogical_focus": "Analogi pintu koridor antar ruangan, konsep layar aktif, tumpukan riwayat (back stack) agar tombol Back tetap berfungsi, trace transisi layar, dan kuis navigasi.",
+      "prerequisites": ["for loop & List Data"],
+      "rubric_targets": {
+        "pedagogical_clarity_min": 4.5,
+        "aphantasia_compliance": 1.0,
+        "dyslexia_compliance": 1.0,
+        "code_executability": 1.0,
+        "question_quality_min": 4.5
+      }
+    }
+  ]
+}

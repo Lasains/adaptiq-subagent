@@ -1,0 +1,52 @@
+# Evaluation Configuration for Java Mobile Adaptive Tutor Subagent
+# Follows google-agents-cli-eval & Quality Flywheel standards
+
+eval_suite_name: "java_mobile_adaptive_tutor_eval"
+dataset_path: "tests/eval/datasets/java_mobile_zero_knowledge_dataset.json"
+results_dir: "artifacts/grade_results"
+
+metrics_to_run:
+  - zero_knowledge_pedagogical_clarity
+  - aphantasia_safety_trace_compliance
+  - dyslexia_formatting_adherence
+  - code_executability
+  - mobile_context_relevance
+  - question_pedagogical_quality
+  - feedback_actionability
+
+rubrics:
+  material_evaluation:
+    zero_knowledge_pedagogical_clarity:
+      description: "Explains concepts from first principles using intuitive real-world physical/mechanical analogies without unexplained jargon."
+      scale: [1, 5]
+      pass_threshold: 4.0
+    aphantasia_safety_trace_compliance:
+      description: "Strictly 0 forbidden imagery words ('bayangkan', 'imagine', etc.) and contains a Markdown Execution Trace Table."
+      scale: [0, 1]
+      pass_threshold: 1.0
+    dyslexia_formatting_adherence:
+      description: "Chunked text (<= 3 sentences per paragraph), bold keywords, numbered lists, clean separation of code and text."
+      scale: [0, 1]
+      pass_threshold: 1.0
+    code_executability:
+      description: "Sample Java code compiles and runs cleanly on JDK 21+ without syntax or runtime errors."
+      scale: [0, 1]
+      pass_threshold: 1.0
+    mobile_context_relevance:
+      description: "Directly relates coding concepts to mobile app user interface (screen, buttons, user touch reactions)."
+      scale: [1, 5]
+      pass_threshold: 4.0
+
+  assessment_evaluation:
+    question_pedagogical_quality:
+      description: "Questions test core conceptual understanding and logic rather than obscure syntax or trick questions, suitable for a zero-knowledge beginner."
+      scale: [1, 5]
+      pass_threshold: 4.0
+    scaffolding_and_progression:
+      description: "Questions follow a progressive difficulty ladder: from output prediction to tracing state changes."
+      scale: [1, 5]
+      pass_threshold: 4.0
+    feedback_actionability:
+      description: "Provides clear, empathetic explanations for reference answers and addresses common misconceptions."
+      scale: [1, 5]
+      pass_threshold: 4.0
