@@ -1,0 +1,1 @@
+mungkin ini diluar kontesk bahasa pemograman, tapi saya mau bertanya pada bagian tipe data disitu dikatakan bahwa ukuran memori dari int itu adalah 32 bit terus di situ saya mengartika bahwa 32 bit ini maksudnya 32 digit angka. apakah sudah benar mengenai asumsi saya?
