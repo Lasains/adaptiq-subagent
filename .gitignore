@@ -8,3 +8,17 @@ __pycache__/
 session/
 adaptiq.db*
 *.db
+
+# Obsidian & Editor metadata/cache
+.obsidian/
+**/.obsidian/
+.makemd/
+**/.makemd/
+.space/
+**/.space/
+.trash/
+**/.trash/
+
+# Tool artifacts & archives
+*.zip
+graphify-out/
