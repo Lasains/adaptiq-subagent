@@ -22,3 +22,9 @@ adaptiq.db*
 # Tool artifacts & archives
 *.zip
 graphify-out/
+
+# Learning vault contents (keep directories empty in repo)
+learning_vault/Java/*
+!learning_vault/Java/.gitkeep
+learning_vault/PHP/*
+!learning_vault/PHP/.gitkeep
